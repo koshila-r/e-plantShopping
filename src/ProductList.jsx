@@ -4,7 +4,7 @@ import CartItem from './CartItem';
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
-
+    const [addedToCart, setAddedToCart] = useState({});
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -252,7 +252,34 @@ function ProductList({ onHomeClick }) {
         e.preventDefault();
         setShowCart(false);
     };
+
+    const handleAddToCart = (plant) => {
+        dispatch(addItem(plant));
+        setAddedToCart((prev) => ({ ...prev, [plant.name]: true }));
+    };
+
     return (
+        <div className="product-grid">
+        {plantsArray.map((category, index) => (
+          <div key={index}>
+            <h1><div>{category.category}</div></h1>
+            <div className="product-list">
+              {category.plants.map((plant, plantIndex) => (
+                <div key={plantIndex} className="plant-card">
+                  <img src={plant.image} alt={plant.name} />
+                  <h2>{plant.name}</h2>
+                  <p>{plant.description}</p>
+                  <p>{plant.cost}</p>
+                  <button onClick={() => handleAddToCart(plant)}>Add to Cart</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+
+
         <div>
             <div className="navbar" style={styleObj}>
                 <div className="tag">
@@ -281,7 +308,7 @@ function ProductList({ onHomeClick }) {
                 <CartItem onContinueShopping={handleContinueShopping} />
             )}
         </div>
-    );
+    
 }
 
 export default ProductList;
